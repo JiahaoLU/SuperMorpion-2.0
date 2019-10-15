@@ -15,7 +15,7 @@ def handle(TCPSock):# pseudo-mainthread
 def thread1(TCPSock):
     while True: #when game is not end
         if len(Client_Instructions.Client_ins_send) != 0:
-            to_send = Client_Instructions.Client_ins_send.pop(0)
+            to_send = Client_Instructions.Client_ins_send.popleft()
             print('send data pop:',to_send)
             # print(type(to_send))
             TCPSock.send(to_send.encode())
@@ -27,7 +27,7 @@ def thread1(TCPSock):
 
 def client():
 # def main():
-    host = "138.195.243.47" # set to IP address of target computer
+    host = "138.195.243.44" # set to IP address of target computer
     port = 2101
     addr = (host, port)
     TCPSock = socket(AF_INET, SOCK_STREAM)

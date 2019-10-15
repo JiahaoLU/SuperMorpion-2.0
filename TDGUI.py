@@ -28,7 +28,7 @@ def collect_instruction(morpion, isover):
                 Client_Instructions.Client_ins_send.append(into_str(event)) # store local_player's instructions to be ready to send
                 print('append event:',into_str(event))
     while len(Client_Instructions.Client_ins_rece) != 0:
-        event_str_rece = Client_Instructions.Client_ins_rece.pop(0)
+        event_str_rece = Client_Instructions.Client_ins_rece.popleft()
         print('pop event:',event_str_rece)
         event_key = into_ins(event_str_rece)# clean and excecute received instructions from the other player
         print(morpion.current_player.player_flag, morpion.local_player.player_flag)
