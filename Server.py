@@ -3,13 +3,14 @@
 import os
 from socket import *
 from multiprocessing import Process
+from threading import Thread
 
 def handle(clist):#server task function # pseudo-mainthread
     print("Waiting to receive messages...")
     while len(clist) < 2: #wait until 2 clients are all connected
         # print(len(clist),'client(s) have(has) connected')
         pass
-    thread_over = threading.Event() #thread1 or thread2 over flag. initialize to False
+    thread_over = Process.Event() #thread1 or thread2 over flag. initialize to False
     try:
         td1 = Process(target = thread1, args = (clist,thread_over,),daemon= True)# subthread1 for receiving messenges from client0 and sending it to client1
         td2 = Process(target = thread2, args = (clist,thread_over,),daemon= True)# subthread2 for receiving messenges from client1 and sending it to client0
@@ -68,7 +69,7 @@ TCPSock.bind(addr)
 TCPSock.listen(100)
 clist = []
 
-th = threading.Thread(target=handle,args = (clist,))
+th = Thread(target=handle,args = (clist,))
 th.start()
 
 while True:
