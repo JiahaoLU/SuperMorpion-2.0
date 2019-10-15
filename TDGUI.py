@@ -65,9 +65,11 @@ def over_instructions(morpion, screen):
     return isover
 
 
-def local_game():#sub-thread
+
+def main():
     # parameters for initialisation
     pygame.init()                   # Usual initialization of all the pygame modules
+    images = load_images()
     coordonates = Coordonates()     # Initialization of the global graphic parameters (class defined in Parameters.py)
     screen_size = (coordonates.screen_X, coordonates.screen_Y)  # Fetches back the dimensions of the screen that are /
                                                                 # ... defined by default in the Coordonates class
@@ -80,9 +82,10 @@ def local_game():#sub-thread
     isover = False                  # the game is not over yet
     morpion = Morpion()             # initialization of the chessboard (class in TDGame)
     morpion.score_increased = 0     # variable that checks if the score of the winner has already been increased or not
-
+    # client()
     # monitors the game conditions and keyboard input at any time
     while True:
+        print('While TRUE')
         if Client_Instructions.Client_player == True:
             morpion.local_player = morpion.players[0]
         else:
@@ -91,17 +94,13 @@ def local_game():#sub-thread
         grids = Grids()                                            # Graphic appearance of the Morpion
         collect_instruction(morpion, isover)     # Collects the keyboard input at any time
         screen.fill((255, 255, 255))                    # Background of the screen = white
-        draw_visuals(morpion, click_on, screen, grids)
+        draw_visuals(morpion, click_on, screen, grids, images)
         # if the game is over, displays a message about the winner
         # and blocks any further manipulation, except for R (restart the game)
         isover = over_instructions(morpion, screen)
         pygame.display.update()
         clock.tick(10)
 
-def main():
-    th_local = threading.Thread(target=local_game,args=(),daemon= False)
-    th_local.start()
-    client()
 
 if __name__ == '__main__':
     main()
@@ -133,9 +132,9 @@ def into_str(event): # convert event type into string in order to send instructi
     #     return
 
 def into_ins(str): # convert event type into string in order to send instructions to server
-    if str == 'w':
+    if str == 'e':
         return pygame.K_w
-    elif str == 's':
+    elif str == 'd':
         return pygame.K_s
     elif str == 'up':
         return pygame.K_UP

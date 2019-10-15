@@ -13,19 +13,52 @@ def image_count(frame_count, click_on):
             click_on = True  # turn it on
     return frame_count, click_on
 
-
+def load_images():
+    dimensions = [20, 20]
+    k_left_original = pygame.image.load("Left.png")
+    k_left = pygame.transform.scale(k_left_original, dimensions)
+    k_right_original = pygame.image.load("Right.png")
+    k_right = pygame.transform.scale(k_right_original, dimensions)
+    k_up_original = pygame.image.load("Up.png")
+    k_up = pygame.transform.scale(k_up_original, dimensions)
+    k_down_original = pygame.image.load("Down.png")
+    k_down = pygame.transform.scale(k_down_original, dimensions)
+    k_e_original = pygame.image.load("E.png")
+    k_e = pygame.transform.scale(k_e_original, dimensions)
+    k_d_original = pygame.image.load("D.png")
+    k_d = pygame.transform.scale(k_d_original, dimensions)
+    print("images loaded")
+    return k_left, k_right, k_up, k_down, k_e, k_d, dimensions
 
 # Drawing the visuals
-def draw_visuals(morpion, imageOn, screen, grids):
+def draw_visuals(morpion, imageOn, screen, grids, images):
     draw_images(morpion, imageOn, screen, grids)
-    draw_captions(morpion, imageOn, screen, grids)
+    draw_captions(morpion, screen, images)
 
 # drawing the informations about the players
-def draw_captions(morpion, imageOn, screen, grids):
-    show_text(screen, (730, 300), 'Player 1 score : {}'.format(morpion.players[0].player_score),
+def draw_captions(morpion, screen, images):
+    show_text(screen, (730, 300), 'Player 1 score: {}'.format(morpion.players[0].player_score),
               (0, 0, 18), False, 30)
-    show_text(screen, (730, 350), 'Player 2 score : {}'.format(morpion.players[1].player_score),
+    show_text(screen, (730, 350), 'Player 2 score: {}'.format(morpion.players[1].player_score),
               (0, 0, 18), False, 30)
+
+    show_text(screen, (620, 630), 'To move, please use:',
+              (0, 0, 18), False, 20)
+
+    k_left, k_right, k_up, k_down, k_e, k_d, dimensions = images
+    k_left_position = [770, 630]
+    k_down_position = k_left_position
+    k_up_position = k_left_position
+    k_right_position = k_left_position
+    print(k_right_position)
+
+    screen.blit(k_left, k_left_position)
+    screen.blit(k_down, k_down_position)
+    screen.blit(k_up, k_up_position)
+    screen.blit(k_right, k_right_position)
+
+    show_text(screen, (620, 670), 'To place a pawn, please use the space bar',
+              (0, 0, 18), False, 20)
     # parameters : (screen, pos, text, color, font_bold=False, font_size=60, font_italic=False)
 
 
