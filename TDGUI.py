@@ -1,16 +1,14 @@
 import sys
-# from copy import deepcopy
 from pygame import *
 from TDGame import *
 from Image import *
-import json
-import threading
 from Client_Game import *
 import Client_Instructions
+from multiprocessing import Process
 
 
 # collects the keyboard input at any time
-def collect_instruction(morpion, isover):
+def collect_instruction(morpion, isover, counter_click):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -26,6 +24,8 @@ def collect_instruction(morpion, isover):
             event_str_send = into_str(event)
             if event_str_send != None:
                 Client_Instructions.Client_ins_send.append(into_str(event)) # store local_player's instructions to be ready to send
+                counter_click += 1
+                print(counter_click)
                 print('append event:',into_str(event))
     while len(Client_Instructions.Client_ins_rece) != 0:
         event_str_rece = Client_Instructions.Client_ins_rece.popleft()
@@ -44,6 +44,7 @@ def collect_instruction(morpion, isover):
         elif event_key == pygame.K_r:   # predefined pygame function to check is the player presses R
                 # to start another round, the infos AND the visuals of the morpion need to be cleaned
             morpion.create_board()
+    return counter_click
 
 # judges whether the game is over, shows the winner's infos
 def over_instructions(morpion, screen):
@@ -65,7 +66,9 @@ def over_instructions(morpion, screen):
     return isover
 
 
-def local_game():#sub-thread
+
+
+def main():
     # parameters for initialisation
     pygame.init()                   # Usual initialization of all the pygame modules
     coordonates = Coordonates()     # Initialization of the global graphic parameters (class defined in Parameters.py)
@@ -80,6 +83,9 @@ def local_game():#sub-thread
     isover = False                  # the game is not over yet
     morpion = Morpion()             # initialization of the chessboard (class in TDGame)
     morpion.score_increased = 0     # variable that checks if the score of the winner has already been increased or not
+    th_local = Process(target=client,args=(),daemon=False)
+    th_local.start()
+    counter_click = 0
 
     # monitors the game conditions and keyboard input at any time
     while True:
@@ -89,7 +95,7 @@ def local_game():#sub-thread
             morpion.local_player = morpion.players[1]
         frame_count, click_on = image_count(frame_count, click_on) # Blinking pointer
         grids = Grids()                                            # Graphic appearance of the Morpion
-        collect_instruction(morpion, isover)     # Collects the keyboard input at any time
+        counter_click = collect_instruction(morpion, isover,counter_click)     # Collects the keyboard input at any time
         screen.fill((255, 255, 255))                    # Background of the screen = white
         draw_visuals(morpion, click_on, screen, grids)
         # if the game is over, displays a message about the winner
@@ -97,11 +103,6 @@ def local_game():#sub-thread
         isover = over_instructions(morpion, screen)
         pygame.display.update()
         clock.tick(10)
-
-def main():
-    th_local = threading.Thread(target=local_game,args=(),daemon= False)
-    th_local.start()
-    client()
 
 if __name__ == '__main__':
     main()

@@ -1,10 +1,11 @@
 import os
 from socket import *
 import threading
+from multiprocessing import Process
 import Client_Instructions
 def handle(TCPSock):# pseudo-mainthread
     try:
-        th1 = threading.Thread(target = thread1,args=(TCPSock,),daemon= True)# thread1 for receiving messenges from client1 and sending it to client0
+        th1 = Process(target = thread1,args=(TCPSock,),daemon= True)# thread1 for receiving messenges from client1 and sending it to client0
         th1.start()
     except:
         print("Error: unable to start thread")
@@ -13,9 +14,12 @@ def handle(TCPSock):# pseudo-mainthread
 
 # sub-thread for receiving messenges from client1 and sending it to client0
 def thread1(TCPSock):
+    counter_send = 0
     while True: #when game is not end
-        if len(Client_Instructions.Client_ins_send) != 0:
+        while len(Client_Instructions.Client_ins_send) != 0:
             to_send = Client_Instructions.Client_ins_send.popleft()
+            counter_send += 1
+            print('counter_send: ',counter_send)
             print('send data pop:',to_send)
             # print(type(to_send))
             TCPSock.send(to_send.encode())
@@ -27,12 +31,14 @@ def thread1(TCPSock):
 
 def client():
 # def main():
+    global counter_send
+    counter_send = 0
     host = "138.195.243.44" # set to IP address of target computer
-    port = 2101
+    port = 8080
     addr = (host, port)
     TCPSock = socket(AF_INET, SOCK_STREAM)
     TCPSock.connect(addr)
-    th = threading.Thread(target=handle,args=(TCPSock,),daemon= True)
+    th = Process(target=handle,args=(TCPSock,),daemon= True)
     th.start()
 
     # main thread to receive info from server
