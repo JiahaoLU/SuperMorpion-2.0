@@ -10,11 +10,13 @@ import Client_Instructions
 
 
 # collects the keyboard input at any time
-def collect_instruction(morpion, isover):
+def collect_instruction(morpion, isover, screen):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        if morpion.current_player == morpion.local_player:# judge whether local player is current player, in order to validate or cancel this press on keyboard
+        # judges whether the local player is the current player, in order to validate or cancel this press on keyboard
+        if morpion.current_player == morpion.local_player:
+            show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
             if event.type == pygame.KEYDOWN:
                 # if the game is not over, it has to go on
                 if not isover:
@@ -26,10 +28,10 @@ def collect_instruction(morpion, isover):
             event_str_send = into_str(event)
             if event_str_send != None:
                 Client_Instructions.Client_ins_send.append(into_str(event)) # store local_player's instructions to be ready to send
-                print('append event:',into_str(event))
+                print('append event:', into_str(event))
     while len(Client_Instructions.Client_ins_rece) != 0:
         event_str_rece = Client_Instructions.Client_ins_rece.pop(0)
-        print('pop event:',event_str_rece)
+        print('pop event:', event_str_rece)
         event_key = into_ins(event_str_rece)# clean and excecute received instructions from the other player
         print(morpion.current_player.player_flag, morpion.local_player.player_flag)
         if event_key == 'QUIT':
@@ -85,14 +87,14 @@ def main():
     # client()
     # monitors the game conditions and keyboard input at any time
     while True:
-        print('While TRUE')
+        print('The game is not over')
         if Client_Instructions.Client_player == True:
             morpion.local_player = morpion.players[0]
         else:
             morpion.local_player = morpion.players[1]
         frame_count, click_on = image_count(frame_count, click_on) # Blinking pointer
         grids = Grids()                                            # Graphic appearance of the Morpion
-        collect_instruction(morpion, isover)     # Collects the keyboard input at any time
+        collect_instruction(morpion, isover, screen)     # Collects the keyboard input at any time
         screen.fill((255, 255, 255))                    # Background of the screen = white
         draw_visuals(morpion, click_on, screen, grids, images)
         # if the game is over, displays a message about the winner
@@ -153,3 +155,5 @@ def into_ins(str): # convert event type into string in order to send instruction
         return 'QUIT'
     # else:
     #     return
+
+
