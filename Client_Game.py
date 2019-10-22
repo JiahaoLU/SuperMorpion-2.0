@@ -29,13 +29,16 @@ def thread1(TCPSock):
                 os._exit(0)
             time.sleep(0.05)
 
+def getIP():
+    host = gethostname()
+    return gethostbyname(host)
 
-def client():
+def client(host = getIP()):
 # def main():
     global counter_send
     counter_send = 0
-    host = "138.195.240.245" # set to IP address of target computer
     port = 8080
+    print(host)
     addr = (host, port)
     TCPSock = socket(AF_INET, SOCK_STREAM)
     TCPSock.connect(addr)

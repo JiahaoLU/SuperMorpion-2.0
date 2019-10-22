@@ -8,6 +8,7 @@ import time
 def handle(clist,TCPSock,buf):#server task function # pseudo-mainthread
     print("Waiting to receive messages...")
     while len(clist) < 2: #wait until 2 clients are all connected
+        print(len(clist))
         time.sleep(1)
     thread_over = threading.Event() #thread1 or thread2 over flag. initialize to False
     try:
@@ -46,7 +47,7 @@ def thread2(clist,thread_over,buf):# thread2 for receiving messenges from client
         if data == "exit":
             thread_over.set()
 
-def main():
+def server():
     host = gethostname()
     ip = gethostbyname(host)
     print(ip)
@@ -61,10 +62,10 @@ def main():
     th = threading.Thread(target=handle,args = (clist,TCPSock,buf,))
     th.start()
 
-    while True:
+    while len(clist) < 2:
         c, addr = TCPSock.accept()
         clist.append(c)
 
 if __name__ == '__main__':
-    main()
+    server()
 

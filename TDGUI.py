@@ -5,6 +5,7 @@ from Image import *
 import threading
 from Client_Game import *
 import Client_Instructions
+from Keyboard_Convert import *
 
 # collects the keyboard input at any time
 def collect_instruction(morpion, isover, screen):
@@ -63,7 +64,7 @@ def over_instructions(morpion, screen):
             show_text(screen, (150, 30), 'press R to try again...', (0, 0, 22), False, 30)
     return isover
 
-def main():
+def client_game():
     # parameters for initialisation
     pygame.init()                   # Usual initialization of all the pygame modules
     images = load_images()
@@ -81,7 +82,6 @@ def main():
     morpion.score_increased = 0     # variable that checks if the score of the winner has already been increased or not
     th_local = threading.Thread(target=client,args=(),daemon=True)
     th_local.start()
-    counter_click = 0
 
     # monitors the game conditions and keyboard input at any time
     while True:
@@ -102,52 +102,6 @@ def main():
         clock.tick(10)
 
 if __name__ == '__main__':
-    main()
+    client_game()
 
 
-
-##############
-def into_str(event): # convert event type into string in order to send instructions to server
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_e:
-            return 'e'
-        elif event.key == pygame.K_d:
-            return 'd'
-        elif event.key == pygame.K_UP:
-            return 'up'
-        elif event.key == pygame.K_DOWN:
-            return 'down'
-        elif event.key == pygame.K_LEFT:
-            return 'left'
-        elif event.key == pygame.K_RIGHT:
-            return 'right'
-        elif event.key == pygame.K_SPACE:
-            return 'space'
-        elif event.key == pygame.K_r:
-            return 'r'
-    elif event.type == pygame.QUIT:
-        return 'QUIT'
-    # else:
-    #     return
-
-def into_ins(str): # convert event type into string in order to send instructions to server
-    if str == 'e':
-        return pygame.K_e
-    elif str == 'd':
-        return pygame.K_d
-    elif str == 'up':
-        return pygame.K_UP
-    elif str == 'down':
-        a = pygame.K_DOWN
-    elif str == 'left':
-        return pygame.K_LEFT
-    elif str == 'right':
-        return pygame.K_RIGHT
-    elif str == 'space':
-        return pygame.K_SPACE
-    elif str == 'r':
-        return pygame.K_r
-    elif str == 'QUIT':
-        return 'QUIT'
-    # else:
-    #     return
