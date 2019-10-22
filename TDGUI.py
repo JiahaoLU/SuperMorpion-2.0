@@ -13,7 +13,6 @@ def collect_instruction(morpion, isover, screen):
             sys.exit()
         # judges whether the local player is the current player, in order to validate or cancel this press on keyboard
         if morpion.current_player == morpion.local_player:
-            show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
             if event.type == pygame.KEYDOWN:
                 # if the game is not over, it has to go on
                 if not isover:
@@ -79,7 +78,7 @@ def main():
     isover = False                  # the game is not over yet
     morpion = Morpion()             # initialization of the chessboard (class in TDGame)
     morpion.score_increased = 0     # variable that checks if the score of the winner has already been increased or not
-    th_local = threading.Thread(target=client,args=(),daemon=True)
+    th_local = threading.Thread(target=client,args=(),daemon=True) # target = the function I want to run, arguments of the function, true
     th_local.start()
     counter_click = 0
 
@@ -94,7 +93,7 @@ def main():
         grids = Grids()                                            # Graphic appearance of the Morpion
         collect_instruction(morpion, isover, screen)     # Collects the keyboard input at any time
         screen.fill((255, 255, 255))                    # Background of the screen = white
-        draw_visuals(morpion, click_on, screen, grids, images)
+        draw_visuals(morpion, click_on, screen, grids, images, clock)
         # if the game is over, displays a message about the winner
         # and blocks any further manipulation, except for R (restart the game)
         isover = over_instructions(morpion, screen)
