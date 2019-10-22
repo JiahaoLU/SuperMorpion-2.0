@@ -5,7 +5,6 @@ from TDGUI import *
 from Parameters import *
 
 class Morpion(object):
-
     # initialization of the chessboard
 
     # creation of the chessboard (can be called several times if the players decide to play several times in a row)
@@ -29,12 +28,10 @@ class Morpion(object):
         # self.local_player = None
         self.local_player = self.players[1]
 
-
     # initialisation of the Morpion itself by calling the 2 previous functions
     def __init__(self):
         self.create_board()
         self.create_players()
-
 
     # makes the pointer appear on an available position on the board by searching for the first vacant position by index
     def new_click(self):
@@ -48,7 +45,6 @@ class Morpion(object):
                                 self.coordonates.left_top[1] + i * self.coordonates.interval_normal + j * self.coordonates.interval_proj[1]] # screen show grid change
 
                         return
-
 
     # set down chess, put a chess on the board and do relevant things like judgement of winner and put new chess on the board
     def set_down_chess(self):   # if the player presses the "space" button to set down his/her chess

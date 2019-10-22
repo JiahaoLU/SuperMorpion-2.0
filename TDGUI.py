@@ -6,7 +6,6 @@ from Client_Game import *
 import Client_Instructions
 from multiprocessing import Process
 
-
 # collects the keyboard input at any time
 def collect_instruction(morpion, isover, counter_click):
     for event in pygame.event.get():
@@ -65,9 +64,6 @@ def over_instructions(morpion, screen):
             show_text(screen, (150, 30), 'press R to try again...', (0, 0, 22), False, 30)
     return isover
 
-
-
-
 def main():
     # parameters for initialisation
     pygame.init()                   # Usual initialization of all the pygame modules
@@ -83,7 +79,7 @@ def main():
     isover = False                  # the game is not over yet
     morpion = Morpion()             # initialization of the chessboard (class in TDGame)
     morpion.score_increased = 0     # variable that checks if the score of the winner has already been increased or not
-    th_local = Process(target=client,args=(),daemon=False)
+    th_local = threading.Thread(target=client,args=(),daemon=True)
     th_local.start()
     counter_click = 0
 

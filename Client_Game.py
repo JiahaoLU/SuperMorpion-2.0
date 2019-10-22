@@ -3,9 +3,10 @@ from socket import *
 import threading
 from multiprocessing import Process
 import Client_Instructions
+import time
 def handle(TCPSock):# pseudo-mainthread
     try:
-        th1 = Process(target = thread1,args=(TCPSock,),daemon= True)# thread1 for receiving messenges from client1 and sending it to client0
+        th1 = threading.Thread(target = thread1,args=(TCPSock,),daemon= True)# thread1 for receiving messenges from client1 and sending it to client0
         th1.start()
     except:
         print("Error: unable to start thread")
@@ -26,19 +27,19 @@ def thread1(TCPSock):
             if to_send == 'exit':
                 TCPSock.close()
                 os._exit(0)
-            to_send = None
+            time.sleep(0.05)
 
 
 def client():
 # def main():
     global counter_send
     counter_send = 0
-    host = "138.195.243.44" # set to IP address of target computer
+    host = "138.195.240.245" # set to IP address of target computer
     port = 8080
     addr = (host, port)
     TCPSock = socket(AF_INET, SOCK_STREAM)
     TCPSock.connect(addr)
-    th = Process(target=handle,args=(TCPSock,),daemon= True)
+    th = threading.Thread(target=handle,args=(TCPSock,),daemon= True)
     th.start()
 
     # main thread to receive info from server
