@@ -2,6 +2,7 @@ import sys
 from pygame import *
 from TDGame import *
 from Image import *
+import threading
 from Client_Game import *
 import Client_Instructions
 
@@ -24,7 +25,7 @@ def collect_instruction(morpion, isover, screen):
             event_str_send = into_str(event)
             if event_str_send != None:
                 Client_Instructions.Client_ins_send.append(into_str(event)) # store local_player's instructions to be ready to send
-                print('append event:', into_str(event))
+                print('append event:',into_str(event))
     while len(Client_Instructions.Client_ins_rece) != 0:
         event_str_rece = Client_Instructions.Client_ins_rece.popleft()
         print('pop event:',event_str_rece)
