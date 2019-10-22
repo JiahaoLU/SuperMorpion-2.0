@@ -160,13 +160,13 @@ class Morpion(object):
         if direction == pygame.K_SPACE:
             self.set_down_chess()
     # if the direction required is immovable, cancel this instruction
-        if direction == pygame.K_w:
+        if direction == pygame.K_e:
             if self.click_position[0] == 0:
                 return
             else:
                 self.click_position[0] -= 1
                 self.click_coordonate[1] -= self.coordonates.interval_normal
-        elif direction == pygame.K_s:
+        elif direction == pygame.K_d:
             if self.click_position[0] == 2:
                 return
             else:

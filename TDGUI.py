@@ -132,9 +132,9 @@ def into_str(event): # convert event type into string in order to send instructi
 
 def into_ins(str): # convert event type into string in order to send instructions to server
     if str == 'e':
-        return pygame.K_w
+        return pygame.K_e
     elif str == 'd':
-        return pygame.K_s
+        return pygame.K_d
     elif str == 'up':
         return pygame.K_UP
     elif str == 'down':
