@@ -29,11 +29,7 @@ def thread1(TCPSock):
                 os._exit(0)
             time.sleep(0.05)
 
-def getIP():
-    host = gethostname()
-    return gethostbyname(host)
-
-def client(host = getIP()):
+def client(host):
 # def main():
     global counter_send
     counter_send = 0

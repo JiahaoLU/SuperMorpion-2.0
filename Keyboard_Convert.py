@@ -30,7 +30,7 @@ def into_ins(str): # convert event type into string in order to send instruction
     elif str == 'up':
         return pygame.K_UP
     elif str == 'down':
-        a = pygame.K_DOWN
+        return pygame.K_DOWN
     elif str == 'left':
         return pygame.K_LEFT
     elif str == 'right':
