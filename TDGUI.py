@@ -4,14 +4,15 @@ from TDGame import *
 from Image import *
 from Client_Game import *
 import Client_Instructions
-from multiprocessing import Process
 
 # collects the keyboard input at any time
-def collect_instruction(morpion, isover, counter_click):
+def collect_instruction(morpion, isover, screen):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        if morpion.current_player == morpion.local_player:# judge whether local player is current player, in order to validate or cancel this press on keyboard
+        # judges whether the local player is the current player, in order to validate or cancel this press on keyboard
+        if morpion.current_player == morpion.local_player:
+            show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
             if event.type == pygame.KEYDOWN:
                 # if the game is not over, it has to go on
                 if not isover:
@@ -23,9 +24,7 @@ def collect_instruction(morpion, isover, counter_click):
             event_str_send = into_str(event)
             if event_str_send != None:
                 Client_Instructions.Client_ins_send.append(into_str(event)) # store local_player's instructions to be ready to send
-                counter_click += 1
-                print(counter_click)
-                print('append event:',into_str(event))
+                print('append event:', into_str(event))
     while len(Client_Instructions.Client_ins_rece) != 0:
         event_str_rece = Client_Instructions.Client_ins_rece.popleft()
         print('pop event:',event_str_rece)
@@ -43,7 +42,6 @@ def collect_instruction(morpion, isover, counter_click):
         elif event_key == pygame.K_r:   # predefined pygame function to check is the player presses R
                 # to start another round, the infos AND the visuals of the morpion need to be cleaned
             morpion.create_board()
-    return counter_click
 
 # judges whether the game is over, shows the winner's infos
 def over_instructions(morpion, screen):
@@ -67,6 +65,7 @@ def over_instructions(morpion, screen):
 def main():
     # parameters for initialisation
     pygame.init()                   # Usual initialization of all the pygame modules
+    images = load_images()
     coordonates = Coordonates()     # Initialization of the global graphic parameters (class defined in Parameters.py)
     screen_size = (coordonates.screen_X, coordonates.screen_Y)  # Fetches back the dimensions of the screen that are /
                                                                 # ... defined by default in the Coordonates class
@@ -85,15 +84,16 @@ def main():
 
     # monitors the game conditions and keyboard input at any time
     while True:
+        print('The game is not over')
         if Client_Instructions.Client_player == True:
             morpion.local_player = morpion.players[0]
         else:
             morpion.local_player = morpion.players[1]
         frame_count, click_on = image_count(frame_count, click_on) # Blinking pointer
         grids = Grids()                                            # Graphic appearance of the Morpion
-        counter_click = collect_instruction(morpion, isover,counter_click)     # Collects the keyboard input at any time
+        collect_instruction(morpion, isover, screen)     # Collects the keyboard input at any time
         screen.fill((255, 255, 255))                    # Background of the screen = white
-        draw_visuals(morpion, click_on, screen, grids)
+        draw_visuals(morpion, click_on, screen, grids, images)
         # if the game is over, displays a message about the winner
         # and blocks any further manipulation, except for R (restart the game)
         isover = over_instructions(morpion, screen)
@@ -108,10 +108,10 @@ if __name__ == '__main__':
 ##############
 def into_str(event): # convert event type into string in order to send instructions to server
     if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_w:
-            return 'w'
-        elif event.key == pygame.K_s:
-            return 's'
+        if event.key == pygame.K_e:
+            return 'e'
+        elif event.key == pygame.K_d:
+            return 'd'
         elif event.key == pygame.K_UP:
             return 'up'
         elif event.key == pygame.K_DOWN:
@@ -130,15 +130,14 @@ def into_str(event): # convert event type into string in order to send instructi
     #     return
 
 def into_ins(str): # convert event type into string in order to send instructions to server
-    if str == 'w':
+    if str == 'e':
         return pygame.K_w
-    elif str == 's':
+    elif str == 'd':
         return pygame.K_s
     elif str == 'up':
         return pygame.K_UP
     elif str == 'down':
         a = pygame.K_DOWN
-        return a
     elif str == 'left':
         return pygame.K_LEFT
     elif str == 'right':

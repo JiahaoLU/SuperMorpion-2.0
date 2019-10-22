@@ -13,19 +13,66 @@ def image_count(frame_count, click_on):
             click_on = True  # turn it on
     return frame_count, click_on
 
-
+def load_images():
+    dimensions_keys_pictures = [20, 20]
+    k_left_original = pygame.image.load("Left.png")
+    k_left = pygame.transform.scale(k_left_original, dimensions_keys_pictures)
+    k_right_original = pygame.image.load("Right.png")
+    k_right = pygame.transform.scale(k_right_original, dimensions_keys_pictures)
+    k_up_original = pygame.image.load("Up.png")
+    k_up = pygame.transform.scale(k_up_original, dimensions_keys_pictures)
+    k_down_original = pygame.image.load("Down.png")
+    k_down = pygame.transform.scale(k_down_original, dimensions_keys_pictures)
+    k_e_original = pygame.image.load("E.png")
+    k_e = pygame.transform.scale(k_e_original, dimensions_keys_pictures)
+    k_d_original = pygame.image.load("D.png")
+    k_d = pygame.transform.scale(k_d_original, dimensions_keys_pictures)
+    print("images loaded")
+    return k_left, k_right, k_up, k_down, k_e, k_d, dimensions_keys_pictures
 
 # Drawing the visuals
-def draw_visuals(morpion, imageOn, screen, grids):
+def draw_visuals(morpion, imageOn, screen, grids, images):
     draw_images(morpion, imageOn, screen, grids)
-    draw_captions(morpion, imageOn, screen, grids)
+    draw_captions(morpion, screen, images)
 
 # drawing the informations about the players
-def draw_captions(morpion, imageOn, screen, grids):
-    show_text(screen, (730, 300), 'Player 1 score : {}'.format(morpion.players[0].player_score),
+def draw_captions(morpion, screen, images):
+    caption_top_left_position = (745, 300)
+    second_player_caption_position = list(caption_top_left_position)
+    second_player_caption_position[1] += 50
+
+
+    show_text(screen, caption_top_left_position, '   Player 1 score: {}'.format(morpion.players[0].player_score),
               (0, 0, 18), False, 30)
-    show_text(screen, (730, 350), 'Player 2 score : {}'.format(morpion.players[1].player_score),
+    show_text(screen, second_player_caption_position, '   Player 2 score: {}'.format(morpion.players[1].player_score),
               (0, 0, 18), False, 30)
+
+    # informs each player of his/her color
+    circle_radius = 9
+    pygame.draw.circle(screen, (255, 0, 0), caption_top_left_position, circle_radius)
+    pygame.draw.circle(screen, (0, 255, 0), second_player_caption_position, circle_radius)
+
+
+    show_text(screen, (620, 630), 'To move, please use:',
+              (0, 0, 18), False, 20)
+    # pictures to show which keys of the keyboard to use to move on the screen
+    k_left, k_right, k_up, k_down, k_e, k_d, dimensions_keys_pictures = images
+    k_left_position = [770, 625]
+    k_down_position = list(k_left_position)
+    k_down_position[0] += dimensions_keys_pictures[0]
+    k_up_position = list(k_left_position)
+    k_up_position[0] += dimensions_keys_pictures[0]
+    k_up_position[1] -= dimensions_keys_pictures[1]
+    k_right_position = list(k_left_position)
+    k_right_position[0] += 2*dimensions_keys_pictures[0]
+
+    screen.blit(k_left, k_left_position)
+    screen.blit(k_down, k_down_position)
+    screen.blit(k_up, k_up_position)
+    screen.blit(k_right, k_right_position)
+
+    show_text(screen, (620, 670), 'To place a pawn, please use the space bar',
+              (0, 0, 18), False, 20)
     # parameters : (screen, pos, text, color, font_bold=False, font_size=60, font_italic=False)
 
 
@@ -136,6 +183,27 @@ def show_text(screen, pos, text, color, font_bold=False, font_size=60, font_ital
     text_fmt = cur_font.render(text, 1, color)
     # draw words
     screen.blit(text_fmt, pos)
+
+
+# to do
+def show_clock(screen, pos, text, color, font_bold=False, font_size=60, font_italic=False):
+    counter, text = 30, '10'.rjust(3)
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
+    clock = pygame.time.Clock()
+
+    while True:
+        for e in pygame.event.get():
+            if e.type == pygame.USEREVENT:
+                counter -= 1
+                text = str(counter).rjust(3) if counter > 0 else 'boom!'
+            if e.type == pygame.QUIT: break
+        else:
+            screen.fill((255, 255, 255))
+            screen.blit(screen, (32, 48))
+            pygame.display.flip()
+            clock.tick(60)
+            continue
+        break
 
 
 # initializes the drawings of the grids based on different layers
