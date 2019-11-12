@@ -19,8 +19,6 @@ def into_str(event): # convert event type into string in order to send instructi
             return 'r'
     elif event.type == pygame.QUIT:
         return 'QUIT'
-    # else:
-    #     return
 
 def into_ins(str): # convert event type into string in order to send instructions to server
     if str == 'e':
@@ -41,5 +39,3 @@ def into_ins(str): # convert event type into string in order to send instruction
         return pygame.K_r
     elif str == 'QUIT':
         return 'QUIT'
-    # else:
-    #     return
