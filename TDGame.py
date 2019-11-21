@@ -1,53 +1,52 @@
-import pygame
-# from client_service import *
 from numpy import *
 from TDGUI import *
 from Parameters import *
 
+
 class Morpion(object):
     # initialization of the chessboard
-
-    # creation of the chessboard (can be called several times if the players decide to play several times in a row)
-    def create_board(self):
+    def __init__(self):
+        """
+        creation of the chessboard (can be called several times if the players decide to play several times in a row)
+        """
         self.coordonates = Coordonates()    # graphic parameters (lines' thickness etc.)
         self.chessboard = zeros([3, 3, 3])  # the chessboard is empty
         self.player1_grids = []             # visually, player1 doesn't have any chess on the Morpion
         self.player2_grids = []             # same for player2
-        self.vacant_grids = ones([3, 3, 3], dtype = bool)     # grids which are still available. At the beginning they are all available
+        self.vacant_grids = ones([3, 3, 3], dtype=bool)     # grids which are still available. At the beginning they are all available
         self.click_position = [1, 1, 1]     # pointer's initial position on the Morpion
         self.click_coordonate = [self.coordonates.left_top[0] + self.coordonates.interval_normal + self.coordonates.interval_proj[0],
-                                self.coordonates.left_top[1] + self.coordonates.interval_normal + self.coordonates.interval_proj[1]]
-                                # position of the pointer on the screen
+                                 self.coordonates.left_top[1] + self.coordonates.interval_normal + self.coordonates.interval_proj[1]]  # position of the pointer on the screen
         self.score_increased = 0  # variable that checks if the score of the winner has already been increased or not
 
-    # initialisation of all the elements relating to the players
-    def create_players(self):
+        # initialisation of all the elements relating to the players
         self.players = [Player(1, 1), Player(2, -1)]
         self.current_player = self.players[0]
         self.winner = self.current_player
         # self.local_player = None
         self.local_player = self.players[1]
 
-    # initialisation of the Morpion itself by calling the 2 previous functions
-    def __init__(self):
-        self.create_board()
-        self.create_players()
-
-    # makes the pointer appear on an available position on the board by searching for the first vacant position by index
     def new_click(self):
-        # loop to search for an available position in the 3 dimensions
+        """
+        loop to search for an available position in the 3 dimensions to makes the pointer appear on an available
+        position on the board by searching for the first vacant position by index
+        :return:
+        """
         for i in range(3):
             for j in range(3):
                 for k in range(3):
                     if self.vacant_grids[i][j][k]:
-                        self.click_position = [i, j, k] # the coordinates of the available position are transfered to the pointer
-                        self.click_coordonate= [self.coordonates.left_top[0] + (2 - j) * self.coordonates.interval_proj[0] + k * self.coordonates.interval_normal,\
-                                self.coordonates.left_top[1] + i * self.coordonates.interval_normal + j * self.coordonates.interval_proj[1]] # screen show grid change
-
+                        self.click_position = [i, j, k]  # the coordinates of the available position are transfered to the pointer
+                        self.click_coordonate = [self.coordonates.left_top[0] + (2 - j) * self.coordonates.interval_proj[0] + k * self.coordonates.interval_normal,
+                                                 self.coordonates.left_top[1] + i * self.coordonates.interval_normal + j * self.coordonates.interval_proj[1]]  # screen show grid change
                         return
 
-    # set down chess, put a chess on the board and do relevant things like judgement of winner and put new chess on the board
-    def set_down_chess(self):   # if the player presses the "space" button to set down his/her chess
+    def set_down_chess(self):
+        """
+        set down chess, put a chess on the board and do relevant things like judgement of winner and put new chess on the board
+        if the player presses the "space" button to set down his/her chess
+        :return:
+        """
         (x, y, z) = self.click_position
         if not self.vacant_grids[x][y][z]:  # checks if the chosen position is not already taken
             return
@@ -57,33 +56,44 @@ class Morpion(object):
         self.change_player()
         if not self.isover():
             self.new_click()
+
     def change_player(self):
+        """
+        change side of players
+        :return:
+        """
         if self.current_player.player_flag == 1:
             self.current_player = self.players[1]
-            # self.local_player = self.players[1]
             self.player1_grids.append((self.click_coordonate[0], self.click_coordonate[1]))
         else:
             self.current_player = self.players[0]
-            # self.local_player = self.players[0]
             self.player2_grids.append((self.click_coordonate[0], self.click_coordonate[1]))
 
-    # checks if the Morpion is full and there isn't any more space to play
     def isover(self):
+        """
+        checks if the Morpion is full and there isn't any more space to play
+        :return:
+        """
         if self.isfull():
             return True
         elif self.iswin():
             return True
         return False
 
-    # checks if the Morpion is full and there isn't any more space to play
     def isfull(self):
+        """
+        checks if the Morpion is full and there isn't any more space to play
+        :return:
+        """
         if self.vacant_grids.any():
             return False
         return True
 
-
-    # checks if there is a winner
     def iswin(self):
+        """
+        checks if there is a winner
+        :return:
+        """
         layer = self.click_position[0]
         depth = self.click_position[1]
         width = self.click_position[2]
@@ -154,12 +164,16 @@ class Morpion(object):
         else:
             return True
 
-    # once the player has chosen in which position he/she wants to play, the relevant actions have to be taken
     def move(self, direction):
+        """
+        once the player has chosen in which position he/she wants to play, the relevant actions have to be taken
+        :param direction:
+        :return:
+        """
         # sets down the chess input
         if direction == pygame.K_SPACE:
             self.set_down_chess()
-    # if the direction required is immovable, cancel this instruction
+        # if the direction required is immovable, cancel this instruction
         if direction == pygame.K_e:
             if self.click_position[0] == 0:
                 return
@@ -199,16 +213,9 @@ class Morpion(object):
                 self.click_position[2] += 1
                 self.click_coordonate[0] += self.coordonates.interval_normal
 
+
 class Player(object):
     def __init__(self, player_number, player_flag):
         self.player_flag = player_flag
         self.player_number = player_number
         self.player_score = 0
-        # self.player_name = input('Type your name')
-
-
-
-
-
-
-

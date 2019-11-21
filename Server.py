@@ -34,11 +34,11 @@ def handle(clist,TCPSock,buf):
 
 
 def thread1(clist,thread_over,buf):
-    '''
+    """
     subthread1 for receiving messenges from client0 and sending it to client1
     :param thread_over: flag over the thread to monitor if it is ended, initialised to false
     :return:
-    '''
+    """
     clist[0].send("setPlayer1".encode())
     while True:  # when game is not end
         data = clist[0].recv(buf).decode()
@@ -49,10 +49,10 @@ def thread1(clist,thread_over,buf):
 
 
 def thread2(clist,thread_over,buf):
-    '''
+    """
     subthread2 for receiving messenges from client1 and sending it to client0
     :return:
-    '''
+    """
     clist[1].send("setPlayer2".encode())
     while True: #when game is not end
         data = clist[1].recv(buf).decode()
