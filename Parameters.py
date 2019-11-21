@@ -1,7 +1,8 @@
-# to stock global graphic parameters
-
 class Coordonates(object):
     def __init__(self):
+        '''
+        class to stock global graphic parameters
+        '''
         self.left_top = (140, 170)
         self.interval_normal = 190
         self.interval_proj = (60, 40)

@@ -1,13 +1,21 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class Type_in_window():
     def __init__(self):
+        '''
+        the class where the log-in window is created
+        '''
         self.root = tk.Tk()
         self.name = None
         self.ip = None
 
     def type_in(self):
+        '''
+        graphique and button of the window. When the button is clicked, info in the text boxes will be registered.
+        :return:
+        '''
         self.root.title("Welcome to SuperMorpion")
         self.root.geometry('300x300')
 
@@ -36,10 +44,15 @@ class Type_in_window():
         self.root.mainloop()
 
     def on_click(self):
+        '''
+        The click-button movement
+        :return:
+        '''
         self.name = username.get()
         self.ip = ip_adress.get()
-        self.ip = self.ip.replace(' ','')
+        self.ip = self.ip.replace(' ', '')
         self.root.destroy()
+
 
 if __name__ == '__main__':
     tiw = Type_in_window()
