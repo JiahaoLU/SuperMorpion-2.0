@@ -23,7 +23,7 @@ def thread1(TCPSock):
 
 def client():
 # def main():
-    host = "138.195.243.47" # set to IP address of target computer
+    host = "138.195.245.214" # set to IP address of target computer
     port = 13000
     addr = (host, port)
     TCPSock = socket(AF_INET, SOCK_STREAM)

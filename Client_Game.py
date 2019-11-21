@@ -34,7 +34,7 @@ def client():
 # def main():
     global counter_send
     counter_send = 0
-    host = "138.195.240.245" # set to IP address of target computer
+    host = "138.195.245.214" # set to IP address of target computer
     port = 8080
     addr = (host, port)
     TCPSock = socket(AF_INET, SOCK_STREAM)

@@ -21,6 +21,9 @@ def collect_instruction(morpion, isover, screen):
                 elif event.key == pygame.K_r:   # predefined pygame function to check is the player presses R
                         # to start another round, the infos AND the visuals of the morpion need to be cleaned
                     morpion.create_board()
+
+
+
             event_str_send = into_str(event)
             if event_str_send != None:
                 Client_Instructions.Client_ins_send.append(into_str(event)) # store local_player's instructions to be ready to send
@@ -83,23 +86,40 @@ def main():
     counter_click = 0
 
     # monitors the game conditions and keyboard input at any time
+    time_left = 0
+    judgement_for_countdown = False
     while True:
         print('The game is not over')
-        if Client_Instructions.Client_player:               # It is the turn of the local player
-            morpion.local_player = morpion.players[0]
-            if not judgement:                                       # If last time the loop was used, it wasn't the turn of the local player
-                local_bombclock = Bombclock()                       # Initializes the clock with 30 seconds left and starts the countdown
-            time_left = local_bombclock.count_down()                # returns the time left
-            display_countdown(time_left)
-        else:                                                       # It is the turn of the remote player
+        if Client_Instructions.Client_player:
+            morpion.local_player = morpion.players[0]               # Run initially to give a number to each player
+        else:
             morpion.local_player = morpion.players[1]
-        judgement = Client_Instructions.Client_player               # Last time the machine checked, it was the turn of the local player
+
+        # Starts a countdown clock only for the current player (the other one doesn't need to see the time left to play)
+        if morpion.local_player == morpion.current_player:
+            if not judgement_for_countdown:                         # If last time the loop was used, it wasn't the turn of the local player
+                local_bombclock = Bombclock()                       # Initializes the clock with 30 seconds left and starts the countdown
+                print('Bombclock initialized')                      # Useful in case of bug
+            time_left = local_bombclock.count_down()                # Returns the time left
+            print('countdown prompted')                             # Useful in case of bug
+
+            if local_bombclock.count_down() == 0:                   # If the time's up, the current player is forced to set down his/her chess
+                morpion.forced_set_down_chess()
+                event_str_send =into_str(K_SPACE)
+                if event_str_send != None :
+                    Client_Instructions.Client_ins_send.append(
+                        into_str(K_SPACE))  # store local_player's instructions to be ready to send
+                    print('append event:', into_str(K_SPACE))
+
+        judgement_for_countdown = (morpion.current_player == morpion.local_player)# Last time the machine checked, it was the turn of the local player
+
+
 
         frame_count, click_on = image_count(frame_count, click_on)  # Blinking pointer
-        grids = Grids()                                             # Graphic appearance of the Morpion
         collect_instruction(morpion, isover, screen)                # Collects the keyboard input at any time
         screen.fill((255, 255, 255))                                # Background of the screen = white
-        draw_visuals(morpion, click_on, screen, grids, images)
+        grids = Grids()                                             # Graphic appearance of the Morpion
+        draw_visuals(morpion, click_on, screen, grids, images, time_left)   # Also displays the countdown
         # if the game is over, displays a message about the winner
         # and blocks any further manipulation, except for R (restart the game)
         isover = over_instructions(morpion, screen)
