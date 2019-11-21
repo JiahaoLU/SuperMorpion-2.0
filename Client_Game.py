@@ -36,6 +36,7 @@ def client(host):
     port = 8080
     print(host)
     addr = (host, port)
+    print('host'+host)
     TCPSock = socket(AF_INET, SOCK_STREAM)
     TCPSock.connect(addr)
     th = threading.Thread(target=handle,args=(TCPSock,),daemon= True)
