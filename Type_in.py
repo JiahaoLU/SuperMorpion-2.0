@@ -8,8 +8,14 @@ class Type_in_window():
         self.ip = None
 
     def type_in(self):
-        self.root.title("information ")
+        self.root.title("Welcome to SuperMorpion")
         self.root.geometry('300x300')
+
+        photo = tk.PhotoImage(file="./welcome.gif")
+        imglabel = tk.Label(self.root, image=photo)
+        imglabel.pack()
+        slogan = tk.Label(self.root, text="Please log in",font = ('Arial', 20))
+        slogan.pack()
 
         l1 = tk.Label(self.root, text="username")
         l1.pack()
