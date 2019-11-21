@@ -19,7 +19,6 @@ def thread1(TCPSock):
     while True: #when game is not end
         while len(Client_Instructions.Client_ins_send) != 0:
             to_send = Client_Instructions.Client_ins_send.popleft()
-            counter_send += 1
             print('counter_send: ',counter_send)
             print('send data pop:',to_send)
             # print(type(to_send))
