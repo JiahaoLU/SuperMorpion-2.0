@@ -31,10 +31,10 @@ def load_images():
     return k_left, k_right, k_up, k_down, k_e, k_d, dimensions_keys_pictures
 
 # Drawing the visuals
-def draw_visuals(morpion, imageOn, screen, grids, images, clock):
+def draw_visuals(morpion, imageOn, screen, grids, images):
     draw_images(morpion, imageOn, screen, grids)
     draw_captions(morpion, screen, images)
-    show_timer(screen, time_to_play)
+
 
 # drawing the informations about the players
 def draw_captions(morpion, screen, images):
@@ -94,6 +94,18 @@ def draw_captions(morpion, screen, images):
     show_text(screen, instruction2_top_left_position, 'To place a pawn, please use the space bar',
               (0, 0, 18), False, 20)
     # parameters : (screen, pos, text, color, font_bold=False, font_size=60, font_italic=False)
+
+
+def display_countdown(screen, time_left):
+    position_caption = [745, 20]
+    position_numbers = list(position_caption)
+    position_numbers[1] += 20
+
+    if time_left >= 0:
+        show_text(screen, position_caption, "Play before the time is over", (227, 29, 18), False, 30)
+        show_text(screen, position_numbers, str(time_left), (227, 29, 18), False, 30)
+    else:
+        show_text(screen, position_caption, "Time's up", (227, 29, 18), False, 30)
 
 
 # Drawing of the visual 3D frame of the Morpion
@@ -205,17 +217,8 @@ def show_text(screen, pos, text, color, font_bold=False, font_size=55, font_ital
     screen.blit(text_fmt, pos)
 
 
-# timer
-def show_timer(screen, time_to_play):
-    position_caption = [745, 20]
-    position_numbers = list(position_caption)
-    position_numbers[1] += 20
-    start_ticks = pygame.time.get_ticks()  # starts a counter in milliseconds
-    if time_to_play >= 0:
-        show_text(screen, position_caption, "Play before the time is over", (227, 29, 18), False, 50)
-        seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # converts the counter in seconds
-        show_text(screen, position_numbers, str(time_to_play), (227, 29, 18), False, 50)
-        return ceil(time_to_play - seconds)
+
+
 
 
 

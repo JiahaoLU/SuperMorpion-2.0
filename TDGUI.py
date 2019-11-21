@@ -2,7 +2,7 @@ import sys
 from pygame import *
 from TDGame import *
 from Image import *
-import threading
+from threading import Thread
 from Client_Game import *
 import Client_Instructions
 
@@ -85,15 +85,21 @@ def main():
     # monitors the game conditions and keyboard input at any time
     while True:
         print('The game is not over')
-        if Client_Instructions.Client_player == True:
+        if Client_Instructions.Client_player:               # It is the turn of the local player
             morpion.local_player = morpion.players[0]
-        else:
+            if not judgement:                                       # If last time the loop was used, it wasn't the turn of the local player
+                local_bombclock = Bombclock()                       # Initializes the clock with 30 seconds left and starts the countdown
+            time_left = local_bombclock.count_down()                # returns the time left
+            display_countdown(time_left)
+        else:                                                       # It is the turn of the remote player
             morpion.local_player = morpion.players[1]
-        frame_count, click_on = image_count(frame_count, click_on) # Blinking pointer
-        grids = Grids()                                            # Graphic appearance of the Morpion
-        collect_instruction(morpion, isover, screen)     # Collects the keyboard input at any time
-        screen.fill((255, 255, 255))                    # Background of the screen = white
-        draw_visuals(morpion, click_on, screen, grids, images, clock)
+        judgement = Client_Instructions.Client_player               # Last time the machine checked, it was the turn of the local player
+
+        frame_count, click_on = image_count(frame_count, click_on)  # Blinking pointer
+        grids = Grids()                                             # Graphic appearance of the Morpion
+        collect_instruction(morpion, isover, screen)                # Collects the keyboard input at any time
+        screen.fill((255, 255, 255))                                # Background of the screen = white
+        draw_visuals(morpion, click_on, screen, grids, images)
         # if the game is over, displays a message about the winner
         # and blocks any further manipulation, except for R (restart the game)
         isover = over_instructions(morpion, screen)

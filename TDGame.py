@@ -206,6 +206,19 @@ class Player(object):
         self.player_score = 0
         # self.player_name = input('Type your name')
 
+class Bombclock(object):
+    def __init__(self):
+        self.max_time = 30
+        self.count_down_time = self.max_time
+        self.start_of_count_down = pygame.time.get_ticks()       # starts a counter in milliseconds
+
+    def count_down(self):
+        if self.count_down_time >= 0 :
+            seconds = (pygame.time.get_ticks() - self.start_of_count_down) / 1000    # converts the counter in seconds
+            return ceil(self.max_time - seconds)
+        else:
+            return 0
+
 
 
 
