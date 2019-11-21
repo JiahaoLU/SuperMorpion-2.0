@@ -251,4 +251,3 @@ class Grids(object):
             self.layer1.append(self.verticals[k])
             self.layer3.append(self.verticals[3 + k])
             self.layer5.append(self.verticals[6 + k])
-
