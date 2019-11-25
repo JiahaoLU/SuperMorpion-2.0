@@ -41,7 +41,8 @@ def draw_captions(morpion, screen, images):
 
     # dynamic caption informing the player if it is his turn
     if morpion.local_player == morpion.current_player:
-        show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
+        if not morpion.isover():
+            show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
 
     # caption for the scores
     caption_top_left_position = [745, 300]
