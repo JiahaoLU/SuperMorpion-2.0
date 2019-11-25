@@ -15,6 +15,8 @@ def into_str(event): # convert event type into string in order to send instructi
             return 'right'
         elif event.key == pygame.K_SPACE:
             return 'space'
+        elif event.key == pygame.K_SPACE + 1000:
+            return 'space_time_up'
         elif event.key == pygame.K_r:
             return 'r'
     elif event.type == pygame.QUIT:
@@ -35,6 +37,8 @@ def into_ins(str): # convert event type into string in order to send instruction
         return pygame.K_RIGHT
     elif str == 'space':
         return pygame.K_SPACE
+    elif str == 'space_time_up':
+        return pygame.K_SPACE+1000
     elif str == 'r':
         return pygame.K_r
     elif str == 'QUIT':

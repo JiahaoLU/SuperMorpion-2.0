@@ -37,7 +37,7 @@ def collect_instruction(morpion, isover, screen):
             # judge whether local player is current player, in order to validate or cancel this press on keyboard
             # if the game is not over, it has to go on
         if not isover:
-            if event_key == pygame.K_SPACE:
+            if event_key == pygame.K_SPACE + 1000:
                 morpion.forced_set_down_chess()
             else:
                 morpion.move(event_key)
@@ -125,7 +125,7 @@ def count_down_encap(morpion,judgement_for_countdown,local_bombclock,time_left):
 
         if local_bombclock.count_down() == 0 and not morpion.isover():                   # If the time's up, the current player is forced to set down his/her chess
             morpion.forced_set_down_chess()
-            Client_Instructions.Client_ins_send.append('space')  # store local_player's instructions to be ready to send
-            print('append event:', 'space')
+            Client_Instructions.Client_ins_send.append('space_time_up')  # store local_player's instructions to be ready to send
+            print('append event:', 'space_time_up')
 
     return ((morpion.current_player == morpion.local_player),local_bombclock,time_left)# Last time the machine checked, it was the turn of the local player
