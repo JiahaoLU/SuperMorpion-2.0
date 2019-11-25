@@ -37,7 +37,7 @@ def collect_instruction(morpion, isover, screen):
             # judge whether local player is current player, in order to validate or cancel this press on keyboard
             # if the game is not over, it has to go on
         if not isover:
-            if event_key == 'space':
+            if event_key == pygame.K_SPACE:
                 morpion.forced_set_down_chess()
             else:
                 morpion.move(event_key)
@@ -88,36 +88,14 @@ def client_game(host = getIP()):
     morpion.score_increased = 0     # variable that checks if the score of the winner has already been increased or not
     th_local = threading.Thread(target=client,args=(host,),daemon=True)
     th_local.start()
-    counter_click = 0
 
     # monitors the game conditions and keyboard input at any time
-    time_left = 0
+    # function count_down_encap initialization
     judgement_for_countdown = False
+    local_bombclock = None
+    time_left = 30
     while True:
-        print('The game is not over')
-        if Client_Instructions.Client_player:
-            morpion.local_player = morpion.players[0]               # Run initially to give a number to each player
-        else:
-            morpion.local_player = morpion.players[1]
-
-        # Starts a countdown clock only for the current player (the other one doesn't need to see the time left to play)
-        if morpion.local_player == morpion.current_player:
-            if not judgement_for_countdown:                         # If last time the loop was used, it wasn't the turn of the local player
-                local_bombclock = Bombclock()                       # Initializes the clock with 30 seconds left and starts the countdown
-                print('Bombclock initialized')                      # Useful in case of bug
-            time_left = local_bombclock.count_down()                # Returns the time left
-            print('countdown prompted')                             # Useful in case of bug
-
-            if local_bombclock.count_down() == 0:                   # If the time's up, the current player is forced to set down his/her chess
-                morpion.forced_set_down_chess()
-                event_str_send = 'space'
-                Client_Instructions.Client_ins_send.append('space')  # store local_player's instructions to be ready to send
-                print('append event:', 'space')
-
-        judgement_for_countdown = (morpion.current_player == morpion.local_player)# Last time the machine checked, it was the turn of the local player
-
-
-
+        (judgement_for_countdown,local_bombclock,time_left) = count_down_encap(morpion,judgement_for_countdown,local_bombclock,time_left)
         frame_count, click_on = image_count(frame_count, click_on)  # Blinking pointer
         collect_instruction(morpion, isover, screen)                # Collects the keyboard input at any time
         screen.fill((255, 255, 255))                                # Background of the screen = white
@@ -130,3 +108,24 @@ def client_game(host = getIP()):
         clock.tick(10)
 
 
+def count_down_encap(morpion,judgement_for_countdown,local_bombclock,time_left):
+    print('The game is not over')
+    if Client_Instructions.Client_player:
+        morpion.local_player = morpion.players[0]               # Run initially to give a number to each player
+    else:
+        morpion.local_player = morpion.players[1]
+
+    # Starts a countdown clock only for the current player (the other one doesn't need to see the time left to play)
+    if morpion.local_player == morpion.current_player:
+        if not judgement_for_countdown:                         # If last time the loop was used, it wasn't the turn of the local player
+            local_bombclock = Bombclock()                       # Initializes the clock with 30 seconds left and starts the countdown
+            print('Bombclock initialized')                      # Useful in case of bug
+        time_left = local_bombclock.count_down()                # Returns the time left
+        print('countdown prompted')                             # Useful in case of bug
+
+        if local_bombclock.count_down() == 0 and not morpion.isover():                   # If the time's up, the current player is forced to set down his/her chess
+            morpion.forced_set_down_chess()
+            Client_Instructions.Client_ins_send.append('space')  # store local_player's instructions to be ready to send
+            print('append event:', 'space')
+
+    return ((morpion.current_player == morpion.local_player),local_bombclock,time_left)# Last time the machine checked, it was the turn of the local player
