@@ -35,12 +35,18 @@ def draw_visuals(morpion, imageOn, screen, grids, images):
     draw_images(morpion, imageOn, screen, grids)
     draw_captions(morpion, screen, images)
 
+
 # drawing the informations about the players
 def draw_captions(morpion, screen, images):
-    caption_top_left_position = (745, 300)
+
+    # dynamic caption informing the player if it is his turn
+    if morpion.local_player == morpion.current_player:
+        show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
+
+    # caption for the scores
+    caption_top_left_position = [745, 300]
     second_player_caption_position = list(caption_top_left_position)
     second_player_caption_position[1] += 50
-
 
     show_text(screen, caption_top_left_position, '   Player 1 score: {}'.format(morpion.players[0].player_score),
               (0, 0, 18), False, 30)
@@ -52,11 +58,15 @@ def draw_captions(morpion, screen, images):
     pygame.draw.circle(screen, (255, 0, 0), caption_top_left_position, circle_radius)
     pygame.draw.circle(screen, (0, 255, 0), second_player_caption_position, circle_radius)
 
-
-    show_text(screen, (620, 630), 'To move, please use:',
+    # caption "how to play"
+    instruction1_top_left_position = [620, 630]
+    show_text(screen, instruction1_top_left_position, 'To move, please use:',
               (0, 0, 18), False, 20)
+
     # pictures to show which keys of the keyboard to use to move on the screen
     k_left, k_right, k_up, k_down, k_e, k_d, dimensions_keys_pictures = images
+
+    # position of the pictures
     k_left_position = [770, 625]
     k_down_position = list(k_left_position)
     k_down_position[0] += dimensions_keys_pictures[0]
@@ -65,15 +75,37 @@ def draw_captions(morpion, screen, images):
     k_up_position[1] -= dimensions_keys_pictures[1]
     k_right_position = list(k_left_position)
     k_right_position[0] += 2*dimensions_keys_pictures[0]
+    k_e_position = list(k_left_position)
+    k_e_position[0] += 4*dimensions_keys_pictures[0]
+    k_d_position = list(k_left_position)
+    k_d_position[0] += 5*dimensions_keys_pictures[0]
 
+    # display of the pictures
     screen.blit(k_left, k_left_position)
     screen.blit(k_down, k_down_position)
     screen.blit(k_up, k_up_position)
     screen.blit(k_right, k_right_position)
+    screen.blit(k_e, k_e_position)
+    screen.blit(k_d, k_d_position)
 
-    show_text(screen, (620, 670), 'To place a pawn, please use the space bar',
+    # caption for the space bar instruction
+    instruction2_top_left_position = list(instruction1_top_left_position)
+    instruction2_top_left_position[1] += 40
+    show_text(screen, instruction2_top_left_position, 'To place a pawn, please use the space bar',
               (0, 0, 18), False, 20)
     # parameters : (screen, pos, text, color, font_bold=False, font_size=60, font_italic=False)
+
+
+def display_countdown(screen, time_left):
+    position_caption = [745, 20]
+    position_numbers = list(position_caption)
+    position_numbers[1] += 20
+
+    if time_left >= 0:
+        show_text(screen, position_caption, "Play before the time is over", (227, 29, 18), False, 30)
+        show_text(screen, position_numbers, str(time_left), (227, 29, 18), False, 30)
+    else:
+        show_text(screen, position_caption, "Time's up", (227, 29, 18), False, 30)
 
 
 # Drawing of the visual 3D frame of the Morpion
@@ -172,9 +204,9 @@ def draw_images(morpion, imageOn, screen, grids):
 
 
 # General function for writing messages on the screen
-def show_text(screen, pos, text, color, font_bold=False, font_size=60, font_italic=False):
+def show_text(screen, pos, text, color, font_bold=False, font_size=55, font_italic=False):
     # words type and size
-    cur_font = pygame.font.SysFont("Times New Roman", font_size)
+    cur_font = pygame.font.SysFont("Calibri", font_size)
     # overstriking
     cur_font.set_bold(font_bold)
     # declined
@@ -185,25 +217,11 @@ def show_text(screen, pos, text, color, font_bold=False, font_size=60, font_ital
     screen.blit(text_fmt, pos)
 
 
-# to do
-def show_clock(screen, pos, text, color, font_bold=False, font_size=60, font_italic=False):
-    counter, text = 30, '10'.rjust(3)
-    pygame.time.set_timer(pygame.USEREVENT, 1000)
-    clock = pygame.time.Clock()
 
-    while True:
-        for e in pygame.event.get():
-            if e.type == pygame.USEREVENT:
-                counter -= 1
-                text = str(counter).rjust(3) if counter > 0 else 'boom!'
-            if e.type == pygame.QUIT: break
-        else:
-            screen.fill((255, 255, 255))
-            screen.blit(screen, (32, 48))
-            pygame.display.flip()
-            clock.tick(60)
-            continue
-        break
+
+
+
+
 
 
 # initializes the drawings of the grids based on different layers
@@ -251,3 +269,4 @@ class Grids(object):
             self.layer1.append(self.verticals[k])
             self.layer3.append(self.verticals[3 + k])
             self.layer5.append(self.verticals[6 + k])
+
