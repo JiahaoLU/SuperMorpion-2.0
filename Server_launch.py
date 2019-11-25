@@ -1,6 +1,7 @@
 from Server import *
 from TDGUI import *
 from multiprocessing import Process
+import Type_in
 
 
 def main():
@@ -14,6 +15,8 @@ def main():
     server_client.start()
     time.sleep(1)
     process_client.start()
+    ip_window = Type_in.Server_window()
+    ip_window.show_adress()
 
 if __name__ == '__main__':
     main()

@@ -1,5 +1,30 @@
 import tkinter as tk
 from tkinter import ttk
+from socket import *
+
+class Server_window():
+    def __init__(self):
+        self.adress = gethostbyname(gethostname())
+        self.root = tk.Tk()
+
+    def show_adress(self):
+        l1 = tk.Label(self.root, text = 'the server IP is: ' + self.adress)
+        l1.pack()
+        ttk.Button(self.root, text="OK", command = self.on_click).pack()
+        self.center_window()
+        self.root.wm_attributes('-topmost',1)
+        self.root.mainloop()
+
+    def on_click(self):
+        self.root.destroy()
+
+    def center_window(self):
+        ws = self.root.winfo_screenwidth()
+        hs = self.root.winfo_screenheight()
+        x = (ws/2) - self.root.winfo_width()/2
+        y = (hs/2) - self.root.winfo_height()/2
+        self.root.geometry('+%d+%d' % (x, y))
+
 
 
 class Type_in_window():
