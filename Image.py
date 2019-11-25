@@ -2,17 +2,26 @@ import pygame
 from TDGame import *
 from Parameters import *
 
+# Overall function for drawing all the visuals
+def draw_visuals(morpion, imageOn, screen, grids, images, time_left):
+    draw_images(morpion, imageOn, screen, grids)
+    draw_captions(morpion, screen, images, time_left)
 
-# frame counter and click shining switch
-def image_count(frame_count, click_on):
-    frame_count += 1
-    if frame_count % 5 == 0:  # every 30 frames
-        if click_on:  # if it's on
-            click_on = False  # turn it off
-        elif not click_on:  # if it's off
-            click_on = True  # turn it on
-    return frame_count, click_on
 
+# General function for writing messages on the screen
+def show_text(screen, pos, text, color, font_bold=False, font_size=55, font_italic=False):
+    # words type and size
+    cur_font = pygame.font.SysFont("Calibri", font_size)
+    # overstriking
+    cur_font.set_bold(font_bold)
+    # declined
+    cur_font.set_italic(font_italic)
+    # words content
+    text_fmt = cur_font.render(text, 1, color)
+    # draw words
+    screen.blit(text_fmt, pos)
+
+# Loading of the images used to show to the player which key of his/her keyboard to use in order to play
 def load_images():
     dimensions_keys_pictures = [20, 20]
     k_left_original = pygame.image.load("Left.png")
@@ -30,21 +39,17 @@ def load_images():
     print("images loaded")
     return k_left, k_right, k_up, k_down, k_e, k_d, dimensions_keys_pictures
 
-# Drawing the visuals
-def draw_visuals(morpion, imageOn, screen, grids, images, time_left):
-    draw_images(morpion, imageOn, screen, grids)
-    draw_captions(morpion, screen, images, time_left)
-
 
 # drawing the informations about the players
 def draw_captions(morpion, screen, images, time_left):
 
-    # dynamic caption informing the player if it is his turn
+    # dynamic caption informing the player when it is his turn
     if morpion.local_player == morpion.current_player:
         if not morpion.isover():
             show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
 
         # Bombclock (countdown) display
+        # Display of the time left for the player to play
         position_caption = [645, 20]
         position_numbers = list(position_caption)
         position_numbers[1] += 20
@@ -109,7 +114,15 @@ def draw_captions(morpion, screen, images, time_left):
 
 
 
-
+# frame counter and click shining switch
+def image_count(frame_count, click_on):
+    frame_count += 1
+    if frame_count % 5 == 0:  # every 30 frames
+        if click_on:  # if it's on
+            click_on = False  # turn it off
+        elif not click_on:  # if it's off
+            click_on = True  # turn it on
+    return frame_count, click_on
 
 # Drawing of the visual 3D frame of the Morpion
 def draw_images(morpion, imageOn, screen, grids):
@@ -151,7 +164,7 @@ def draw_images(morpion, imageOn, screen, grids):
     # reload click into different layers
     rect_click = pygame.Rect(morpion.click_coordonate[0] - grids.grid_len / 2,
                              morpion.click_coordonate[1] - grids.grid_len / 2, grids.grid_len, grids.grid_len)
-    if imageOn == True:
+    if imageOn:
         if morpion.click_position[1] == 0:
             grids.layer2.append(rect_click)
         elif morpion.click_position[1] == 1:
@@ -206,18 +219,7 @@ def draw_images(morpion, imageOn, screen, grids):
                                                      grids.grid_len], 0)
 
 
-# General function for writing messages on the screen
-def show_text(screen, pos, text, color, font_bold=False, font_size=55, font_italic=False):
-    # words type and size
-    cur_font = pygame.font.SysFont("Calibri", font_size)
-    # overstriking
-    cur_font.set_bold(font_bold)
-    # declined
-    cur_font.set_italic(font_italic)
-    # words content
-    text_fmt = cur_font.render(text, 1, color)
-    # draw words
-    screen.blit(text_fmt, pos)
+
 
 
 # initializes the drawings of the grids based on different layers

@@ -12,7 +12,8 @@ def collect_instruction(morpion, isover, screen):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        # judges whether the local player is the current player, in order to validate or cancel this press on keyboard
+        # judges whether the local player is the current player,
+        # in order to implement the actions corresponding to the player's keyboard input or not
         if morpion.current_player == morpion.local_player:
             if event.type == pygame.KEYDOWN:
                 # if the game is not over, it has to go on
@@ -20,22 +21,19 @@ def collect_instruction(morpion, isover, screen):
                     morpion.move(event.key)
                 # if the game is over, and the players want to go for another round
                 elif event.key == pygame.K_r:   # predefined pygame function to check is the player presses R
-                        # to start another round, the infos AND the visuals of the morpion need to be cleaned
+                    # to start another round, the infos AND the visuals of the morpion need to be cleaned
                     morpion.create_board()
             event_str_send = into_str(event)
             if event_str_send != None:
                 Client_Instructions.Client_ins_send.append(into_str(event)) # store local_player's instructions to be ready to send
-                print('append event:',into_str(event))
+                print('append event:', into_str(event))
     while len(Client_Instructions.Client_ins_rece) != 0:
         event_str_rece = Client_Instructions.Client_ins_rece.popleft()
-        print('pop event:',event_str_rece)
-        event_key = into_ins(event_str_rece)# clean and excecute received instructions from the other player
+        print('pop event:', event_str_rece)
+        event_key = into_ins(event_str_rece)    # cleans and excecutes the instructions received from the other player
         print(morpion.current_player.player_flag, morpion.local_player.player_flag)
         if event_key == 'QUIT':
             sys.exit()
-        # elif morpion.current_player.player_flag == morpion.local_player.player_flag:
-            # judge whether local player is current player, in order to validate or cancel this press on keyboard
-            # if the game is not over, it has to go on
         if not isover:
             if event_key == pygame.K_SPACE + 1000:
                 morpion.forced_set_down_chess()

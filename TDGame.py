@@ -22,8 +22,8 @@ class Morpion(object):
         self.click_position = [1, 1, 1]     # pointer's initial position on the Morpion
         self.click_coordonate = [self.coordonates.left_top[0] + self.coordonates.interval_normal + self.coordonates.interval_proj[0],
                                 self.coordonates.left_top[1] + self.coordonates.interval_normal + self.coordonates.interval_proj[1]]
-                                # position of the pointer on the screen
-        self.score_increased = 0  # variable that checks if the score of the winner has already been increased or not
+                                    # position of the pointer on the screen
+        self.score_increased = 0    # variable that checks if the score of the winner has already been increased or not
 
     # initialisation of all the elements relating to the players
     def create_players(self):
@@ -241,11 +241,15 @@ class Player(object):
         # self.player_name = input('Type your name')
 
 class Bombclock(object):
+    """
+    Basis for the extra functionality consisting in a timer limiting the time in which the player has to play.
+    """
     def __init__(self):
-        self.max_time = 5
+        self.max_time = 5                                       # time in which the player has to play
         self.count_down_time = self.max_time
-        self.start_of_count_down = pygame.time.get_ticks()       # starts a counter in milliseconds
+        self.start_of_count_down = pygame.time.get_ticks()      # starts a counter in milliseconds
 
+    # function returning current time left for the player to play
     def count_down(self):
         if self.count_down_time >= 0 :
             seconds = (pygame.time.get_ticks() - self.start_of_count_down) / 1000    # converts the counter in seconds
