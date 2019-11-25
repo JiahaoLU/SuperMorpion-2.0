@@ -10,12 +10,15 @@ def main():
     as one client.
     :return:
     '''
-    server_client = Process(target=server,args=(),)
-    process_client = Process(target=client_game,args=(),)
-    server_client.start()
-    ip_window = Type_in.Server_window()
-    ip_window.show_adress()
-    time.sleep(1)
-    process_client.start()
+    try:
+        server_client = Process(target=server,args=(),)
+    except OSError:
+        print("OSError: each Socket adress can onlu be used once, try to check that server is not already launched locally")
+    else:
+        process_client = Process(target=client_game,args=(),)
+        ip_window = Type_in.Server_window()
+        ip_window.show_adress()
+        time.sleep(1)
+        process_client.start()
 if __name__ == '__main__':
     main()

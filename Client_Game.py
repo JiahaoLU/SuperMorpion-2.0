@@ -52,24 +52,30 @@ def client(host):
     addr = (host, port)
     print('host'+host)
     TCPSock = socket(AF_INET, SOCK_STREAM)
-    TCPSock.connect(addr)
-    th = threading.Thread(target=handle,args=(TCPSock,),daemon= True)
-    th.start()
+    try:
+        TCPSock.connect(addr)
+    except ConnectionRefusedError:
+        print("ConnectionRefusedError: can't connect to the aiming adress")
+        TCPSock.close()
+        os._exit(0)
+    else:
+        th = threading.Thread(target=handle,args=(TCPSock,),daemon= True)
+        th.start()
 
-    # main thread to receive info from server
-    while True: # when game is not end
-        data = TCPSock.recv(1024).decode()
-        print("Received message: " + data)
-        if data == 'setPlayer1':
-            Client_Instructions.Client_player = True
-        elif data == 'setPlayer2':
-            pass
-        else:
-            Client_Instructions.Client_ins_rece.append(data)
-            print('received data append:'+data)
-            if data == 'exit':
-                break
-    TCPSock.close()
-    os._exit(0)
+        # main thread to receive info from server
+        while True: # when game is not end
+            data = TCPSock.recv(1024).decode()
+            print("Received message: " + data)
+            if data == 'setPlayer1':
+                Client_Instructions.Client_player = True
+            elif data == 'setPlayer2':
+                pass
+            else:
+                Client_Instructions.Client_ins_rece.append(data)
+                print('received data append:'+data)
+                if data == 'exit':
+                    break
+        TCPSock.close()
+        os._exit(0)
 
 

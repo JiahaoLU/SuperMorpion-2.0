@@ -71,6 +71,10 @@ def getIP():
     return gethostbyname(host)
 
 def client_game(host = getIP()):
+    # to start client info-sender thread
+    th_local = threading.Thread(target=client,args=(host,),daemon=True)
+    th_local.start()
+    time.sleep(2)                   #wait 2s in order to check nothing wrong with connection to server.If not, just quit os
     # parameters for initialisation
     pygame.init()                   # Usual initialization of all the pygame modules
     images = load_images()
@@ -86,9 +90,6 @@ def client_game(host = getIP()):
     isover = False                  # the game is not over yet
     morpion = Morpion()             # initialization of the chessboard (class in TDGame)
     morpion.score_increased = 0     # variable that checks if the score of the winner has already been increased or not
-    th_local = threading.Thread(target=client,args=(host,),daemon=True)
-    th_local.start()
-
     # monitors the game conditions and keyboard input at any time
     # function count_down_encap initialization
     judgement_for_countdown = False
