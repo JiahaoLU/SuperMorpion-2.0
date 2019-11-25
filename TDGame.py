@@ -9,6 +9,10 @@ class Morpion(object):
         """
         creation of the chessboard (can be called several times if the players decide to play several times in a row)
         """
+        self.creat_board()
+        self.creat_players()
+
+    def creat_board(self):
         self.coordonates = Coordonates()    # graphic parameters (lines' thickness etc.)
         self.chessboard = zeros([3, 3, 3])  # the chessboard is empty
         self.player1_grids = []             # visually, player1 doesn't have any chess on the Morpion
@@ -19,6 +23,7 @@ class Morpion(object):
                                  self.coordonates.left_top[1] + self.coordonates.interval_normal + self.coordonates.interval_proj[1]]  # position of the pointer on the screen
         self.score_increased = 0  # variable that checks if the score of the winner has already been increased or not
 
+    def creat_players(self):
         # initialisation of all the elements relating to the players
         self.players = [Player(1, 1), Player(2, -1)]
         self.current_player = self.players[0]
