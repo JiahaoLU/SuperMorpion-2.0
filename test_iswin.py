@@ -1,8 +1,7 @@
 from TDGUI import *
 import pytest
-
-
 class TestClass:
+    # @pytest.fixture(scope='iswin')
     # column
     def test_1(setup_module):
         print('Test_1 called.')

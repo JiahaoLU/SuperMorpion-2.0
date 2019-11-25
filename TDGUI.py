@@ -14,7 +14,6 @@ def collect_instruction(morpion, isover, screen):
             sys.exit()
         # judges whether the local player is the current player, in order to validate or cancel this press on keyboard
         if morpion.current_player == morpion.local_player:
-            show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
             if event.type == pygame.KEYDOWN:
                 # if the game is not over, it has to go on
                 if not isover:

@@ -2,35 +2,36 @@ from numpy import *
 from TDGUI import *
 from Parameters import *
 
-
 class Morpion(object):
     # initialization of the chessboard
-    def __init__(self):
-        """
-        creation of the chessboard (can be called several times if the players decide to play several times in a row)
-        """
-        self.creat_board()
-        self.creat_players()
 
-    def creat_board(self):
+    # creation of the chessboard (can be called several times if the players decide to play several times in a row)
+    def create_board(self):
         self.coordonates = Coordonates()    # graphic parameters (lines' thickness etc.)
         self.chessboard = zeros([3, 3, 3])  # the chessboard is empty
         self.player1_grids = []             # visually, player1 doesn't have any chess on the Morpion
         self.player2_grids = []             # same for player2
-        self.vacant_grids = ones([3, 3, 3], dtype=bool)     # grids which are still available. At the beginning they are all available
+        self.vacant_grids = ones([3, 3, 3], dtype = bool)     # grids which are still available. At the beginning they are all available
         self.click_position = [1, 1, 1]     # pointer's initial position on the Morpion
         self.click_coordonate = [self.coordonates.left_top[0] + self.coordonates.interval_normal + self.coordonates.interval_proj[0],
-                                 self.coordonates.left_top[1] + self.coordonates.interval_normal + self.coordonates.interval_proj[1]]  # position of the pointer on the screen
+                                self.coordonates.left_top[1] + self.coordonates.interval_normal + self.coordonates.interval_proj[1]]
+                                # position of the pointer on the screen
         self.score_increased = 0  # variable that checks if the score of the winner has already been increased or not
 
-    def creat_players(self):
-        # initialisation of all the elements relating to the players
+    # initialisation of all the elements relating to the players
+    def create_players(self):
         self.players = [Player(1, 1), Player(2, -1)]
         self.current_player = self.players[0]
         self.winner = self.current_player
         # self.local_player = None
         self.local_player = self.players[1]
 
+    # initialisation of the Morpion itself by calling the 2 previous functions
+    def __init__(self):
+        self.create_board()
+        self.create_players()
+
+    # makes the pointer appear on an available position on the board by searching for the first vacant position by index
     def new_click(self):
         """
         loop to search for an available position in the 3 dimensions to makes the pointer appear on an available
@@ -61,7 +62,6 @@ class Morpion(object):
         self.change_player()
         if not self.isover():
             self.new_click()
-
     def change_player(self):
         """
         change side of players
@@ -217,7 +217,6 @@ class Morpion(object):
             else:
                 self.click_position[2] += 1
                 self.click_coordonate[0] += self.coordonates.interval_normal
-
 
 class Player(object):
     def __init__(self, player_number, player_flag):
