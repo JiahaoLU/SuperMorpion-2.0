@@ -31,17 +31,29 @@ def load_images():
     return k_left, k_right, k_up, k_down, k_e, k_d, dimensions_keys_pictures
 
 # Drawing the visuals
-def draw_visuals(morpion, imageOn, screen, grids, images):
+def draw_visuals(morpion, imageOn, screen, grids, images, time_left):
     draw_images(morpion, imageOn, screen, grids)
-    draw_captions(morpion, screen, images)
+    draw_captions(morpion, screen, images, time_left)
 
 
 # drawing the informations about the players
-def draw_captions(morpion, screen, images):
+def draw_captions(morpion, screen, images, time_left):
 
     # dynamic caption informing the player if it is his turn
     if morpion.local_player == morpion.current_player:
-        show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
+        if not morpion.isover():
+            show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
+
+        # Bombclock (countdown) display
+        position_caption = [645, 20]
+        position_numbers = list(position_caption)
+        position_numbers[1] += 20
+
+        if time_left >= 0 :
+            show_text(screen, position_caption, "Play before the time is over", (227, 29, 18), False, 30)
+            show_text(screen, position_numbers, str(int(time_left)), (227, 29, 18), False, 30)
+        else :
+            show_text(screen, position_caption, "Time's up", (227, 29, 18), False, 30)
 
     # caption for the scores
     caption_top_left_position = [745, 300]
@@ -96,16 +108,7 @@ def draw_captions(morpion, screen, images):
     # parameters : (screen, pos, text, color, font_bold=False, font_size=60, font_italic=False)
 
 
-def display_countdown(screen, time_left):
-    position_caption = [745, 20]
-    position_numbers = list(position_caption)
-    position_numbers[1] += 20
 
-    if time_left >= 0:
-        show_text(screen, position_caption, "Play before the time is over", (227, 29, 18), False, 30)
-        show_text(screen, position_numbers, str(time_left), (227, 29, 18), False, 30)
-    else:
-        show_text(screen, position_caption, "Time's up", (227, 29, 18), False, 30)
 
 
 # Drawing of the visual 3D frame of the Morpion
@@ -215,13 +218,6 @@ def show_text(screen, pos, text, color, font_bold=False, font_size=55, font_ital
     text_fmt = cur_font.render(text, 1, color)
     # draw words
     screen.blit(text_fmt, pos)
-
-
-
-
-
-
-
 
 
 # initializes the drawings of the grids based on different layers

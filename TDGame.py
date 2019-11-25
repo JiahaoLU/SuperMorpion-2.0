@@ -1,6 +1,7 @@
 from numpy import *
 from TDGUI import *
 from Parameters import *
+import pygame
 
 class Morpion(object):
     # initialization of the chessboard
@@ -42,10 +43,10 @@ class Morpion(object):
             for j in range(3):
                 for k in range(3):
                     if self.vacant_grids[i][j][k]:
-                        self.click_position = [i, j, k]  # the coordinates of the available position are transfered to the pointer
-                        self.click_coordonate = [self.coordonates.left_top[0] + (2 - j) * self.coordonates.interval_proj[0] + k * self.coordonates.interval_normal,
-                                                 self.coordonates.left_top[1] + i * self.coordonates.interval_normal + j * self.coordonates.interval_proj[1]]  # screen show grid change
-                        return
+                        self.click_position = [i, j, k] # the coordinates of the available position are transfered to the pointer
+                        self.click_coordonate= [self.coordonates.left_top[0] + (2 - j) * self.coordonates.interval_proj[0] + k * self.coordonates.interval_normal,\
+                                self.coordonates.left_top[1] + i * self.coordonates.interval_normal + j * self.coordonates.interval_proj[1]] # screen show grid change
+                        return self.vacant_grids[i][j][k]
 
     def set_down_chess(self):
         """
@@ -62,6 +63,14 @@ class Morpion(object):
         self.change_player()
         if not self.isover():
             self.new_click()
+
+    def forced_set_down_chess(self):            # In case time's up
+        (i,j,k) = self.click_position
+        if not self.vacant_grids[i][j][k]:      # If the click of the current player is on an occupied spot
+                                                # The current player still needs to automatically set down his/her chess
+            self.new_click()                    # Finds another vacant position
+        self.set_down_chess()                   # Sets down the chess on that vacant position
+
     def change_player(self):
         """
         change side of players
@@ -223,3 +232,24 @@ class Player(object):
         self.player_flag = player_flag
         self.player_number = player_number
         self.player_score = 0
+        # self.player_name = input('Type your name')
+
+class Bombclock(object):
+    def __init__(self):
+        self.max_time = 5
+        self.count_down_time = self.max_time
+        self.start_of_count_down = pygame.time.get_ticks()       # starts a counter in milliseconds
+
+    def count_down(self):
+        if self.count_down_time >= 0 :
+            seconds = (pygame.time.get_ticks() - self.start_of_count_down) / 1000    # converts the counter in seconds
+            return ceil(self.max_time - seconds)
+        else:
+            return 0
+
+
+
+
+
+
+
