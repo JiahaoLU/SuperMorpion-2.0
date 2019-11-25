@@ -5,6 +5,12 @@ import pygame
 
 class Morpion(object):
     # initialization of the chessboard
+    def __init__(self):
+        """
+        creation of the chessboard (can be called several times if the players decide to play several times in a row)
+        """
+        self.creat_board()
+        self.creat_players()
 
     # creation of the chessboard (can be called several times if the players decide to play several times in a row)
     def create_board(self):
