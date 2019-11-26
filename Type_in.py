@@ -12,8 +12,22 @@ class Server_window():
         self.root = tk.Tk()
 
     def show_adress(self):
-        l1 = tk.Label(self.root, text = 'the server IP is: ' + self.adress)
+        photo = tk.PhotoImage(file="./welcome.gif")
+        imglabel = tk.Label(self.root, image=photo)
+        imglabel.pack()
+        slogan = tk.Label(self.root, text="Please log in", font=('Arial', 20))
+        slogan.pack()
+
+        l1 = tk.Label(self.root, text="username")
         l1.pack()
+        global username
+        username = tk.StringVar()
+        uns = tk.Entry(self.root, textvariable=username)
+        username.set("player_client")
+        uns.pack()
+        
+        l2 = tk.Label(self.root, text = 'the server IP is: ' + self.adress)
+        l2.pack()
         ttk.Button(self.root, text="OK", command = self.on_click).pack()
         self.center_window()
         self.root.wm_attributes('-topmost',1)
@@ -28,6 +42,8 @@ class Server_window():
         x = (ws/2) - self.root.winfo_width()/2
         y = (hs/2) - self.root.winfo_height()/2
         self.root.geometry('+%d+%d' % (x, y))
+
+
 
 
 
