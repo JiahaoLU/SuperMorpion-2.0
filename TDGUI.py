@@ -75,7 +75,6 @@ def client_game(host = getIP()):
     # to start client info-sender thread
     th_local = threading.Thread(target=client,args=(host,),daemon=True)
     th_local.start()
-    time.sleep(2)                   #wait 2s in order to check nothing wrong with connection to server.If not, just quit os
     # parameters for initialisation
     pygame.init()                   # Usual initialization of all the pygame modules
     images = load_images()

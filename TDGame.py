@@ -246,7 +246,7 @@ class Bombclock(object):
     Basis for the extra functionality consisting in a timer limiting the time in which the player has to play.
     """
     def __init__(self):
-        self.max_time = 5                                       # time in which the player has to play
+        self.max_time = 20                                   # time in which the player has to play
         self.count_down_time = self.max_time
         self.start_of_count_down = pygame.time.get_ticks()      # starts a counter in milliseconds
 

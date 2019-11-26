@@ -12,6 +12,7 @@ def main():
     '''
     try:
         server_client = Process(target=server,args=(),)
+        server_client.start()
     except OSError:
         print("OSError: each Socket adress can onlu be used once, try to check that server is not already launched locally")
     else:
