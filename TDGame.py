@@ -66,6 +66,7 @@ class Morpion(object):
         self.chessboard[x][y][z] = self.current_player.player_flag
         self.vacant_grids[x][y][z] = False  # registers that the position on the Morpion is now taken
         self.winner = self.current_player
+        print("{} sets down a chess".format(self.current_player ))
         self.change_player()
         if not self.isover():
             self.new_click()

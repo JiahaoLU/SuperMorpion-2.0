@@ -65,8 +65,11 @@ def over_instructions(morpion, screen):
     return isover
 
 def getIP():
-    host = gethostname()
-    return gethostbyname(host)
+    s = socket(AF_INET, SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    h = s.getsockname()[0]
+    s.close()
+    return h
 
 def client_game(host = getIP()):
     # to start client info-sender thread
@@ -122,8 +125,7 @@ def count_down_encap(morpion,judgement_for_countdown,local_bombclock,time_left):
         time_left = local_bombclock.count_down()                # Returns the time left
         print('countdown prompted')                             # Useful in case of bug
 
-        if local_bombclock.count_down() == 0 and not morpion.isover():                   # If the time's up, the current player is forced to set down his/her chess
-            morpion.forced_set_down_chess()
+        if local_bombclock.count_down() == 0 and not morpion.isover():   # If the time's up, the current player is forced to set down his/her chess
             Client_Instructions.Client_ins_send.append('space_time_up')  # store local_player's instructions to be ready to send
             print('append event:', 'space_time_up')
 
