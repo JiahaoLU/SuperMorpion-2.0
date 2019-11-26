@@ -1,5 +1,5 @@
 from collections import deque
-# the buffer stockage of instructions recieved from one client and sent to another
+# the buffer stockage of instructions received from one client and sent to another
 Client_ins_rece = deque()
 Client_ins_send = deque()
 
