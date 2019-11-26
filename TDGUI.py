@@ -125,7 +125,8 @@ def count_down_encap(morpion,judgement_for_countdown,local_bombclock,time_left):
         print('countdown prompted')                             # Useful in case of bug
 
         if local_bombclock.count_down() == 0 and not morpion.isover():   # If the time's up, the current player is forced to set down his/her chess
+            morpion.forced_set_down_chess()
             Client_Instructions.Client_ins_send.append('space_time_up')  # store local_player's instructions to be ready to send
             print('append event:', 'space_time_up')
 
-    return ((morpion.current_player == morpion.local_player),local_bombclock,time_left)# Last time the machine checked, it was the turn of the local player
+    return ((morpion.current_player == morpion.local_player),local_bombclock,time_left) # Last time the machine checked, it was the turn of the local player
