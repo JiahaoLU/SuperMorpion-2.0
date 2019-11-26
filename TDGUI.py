@@ -119,7 +119,7 @@ def count_down_encap(morpion,judgement_for_countdown,local_bombclock,time_left):
     # Starts a countdown clock only for the current player (the other one doesn't need to see the time left to play)
     if morpion.local_player == morpion.current_player:
         if not judgement_for_countdown:                         # If last time the loop was used, it wasn't the turn of the local player
-            local_bombclock = Bombclock()                       # Initializes the clock with 30 seconds left and starts the countdown
+            local_bombclock = Bombclock()                       # Initializes the clock with XX seconds left and starts the countdown
             print('Bombclock initialized')                      # Useful in case of bug
         time_left = local_bombclock.count_down()                # Returns the time left
         print('countdown prompted')                             # Useful in case of bug

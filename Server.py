@@ -68,7 +68,10 @@ def server():
     :return:
     '''
     host = gethostname()
-    ip = gethostbyname(host)
+    s = socket(AF_INET, SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    s.close()
     print(ip)
     port = 8080
     buf = 1024

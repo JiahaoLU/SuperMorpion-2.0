@@ -4,7 +4,11 @@ from socket import *
 
 class Server_window():
     def __init__(self):
-        self.adress = gethostbyname(gethostname())
+        host = gethostname()
+        s = socket(AF_INET, SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        self.adress = ip
         self.root = tk.Tk()
 
     def show_adress(self):
