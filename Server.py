@@ -74,16 +74,21 @@ def server():
     buf = 1024
     addr = (host, port)
     TCPSock = socket(AF_INET, SOCK_STREAM)
-    TCPSock.bind(addr)
-    TCPSock.listen(100)
-    clist = []
+    try:
+        TCPSock.bind(addr)
+    except OSError:
+        print("each Socket adress can onlu be used once")
+        os._exit(0)
+    else:
+        TCPSock.listen(100)
+        clist = []
 
-    th = threading.Thread(target=handle,args = (clist,TCPSock,buf,))
-    th.start()
+        th = threading.Thread(target=handle,args = (clist,TCPSock,buf,))
+        th.start()
 
-    while len(clist) < 2:
-        c, addr = TCPSock.accept()
-        clist.append(c)
+        while len(clist) < 2:
+            c, addr = TCPSock.accept()
+            clist.append(c)
 
 
 if __name__ == '__main__':
