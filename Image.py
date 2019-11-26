@@ -48,17 +48,17 @@ def draw_captions(morpion, screen, images, time_left):
         if not morpion.isover():
             show_text(screen, (100, 10), 'It is your turn!', (227, 29, 18), False, 50)
 
-        # Bombclock (countdown) display
-        # Display of the time left for the player to play
-        position_caption = [645, 20]
-        position_numbers = list(position_caption)
-        position_numbers[1] += 20
-
-        if time_left >= 0 :
-            show_text(screen, position_caption, "Play before the time is over", (227, 29, 18), False, 30)
-            show_text(screen, position_numbers, str(int(time_left)), (227, 29, 18), False, 30)
-        else :
-            show_text(screen, position_caption, "Time's up", (227, 29, 18), False, 30)
+            # Bombclock (countdown) display
+            # Display of the time left for the player to play
+            position_caption = [645, 20]
+            position_numbers = list(position_caption)
+            position_numbers[1] += 20
+    
+            if time_left >= 0 :
+                show_text(screen, position_caption, "Play before the time is over", (227, 29, 18), False, 30)
+                show_text(screen, position_numbers, str(int(time_left)), (227, 29, 18), False, 30)
+            else :
+                show_text(screen, position_caption, "Time's up", (227, 29, 18), False, 30)
 
     # caption for the scores
     caption_top_left_position = [745, 300]
@@ -111,6 +111,22 @@ def draw_captions(morpion, screen, images, time_left):
     show_text(screen, instruction2_top_left_position, 'To place a pawn, please use the space bar',
               (0, 0, 18), False, 20)
     # parameters : (screen, pos, text, color, font_bold=False, font_size=60, font_italic=False)
+
+# displaying the message when the game is over
+def draw_isover(morpion, screen):
+    if morpion.iswin() :
+        show_text(screen, (100, 10),
+                  'Player {} wins!'.format(str(morpion.winner.player_number)) + ' ',
+                  (227, 29, 18), False, 50)
+        winner_number = str(morpion.winner.player_number)  # fetches the information we want to display on the screen
+        winner_score = morpion.winner.player_score
+        show_text(screen, (100, 50),
+                  'Player {0} new score : {1}'.format(winner_number, winner_score)
+                  + ' ', (227, 29, 18), False, 50)
+        show_text(screen, (150, 90), 'The looser can press R to start another round...', (0, 0, 22), False, 25)
+    else :
+        show_text(screen, (100, 10), 'draw', (227, 29, 18), False, 100)
+        show_text(screen, (150, 30), 'The looser can press R to start another round...', (0, 0, 22), False, 25)
 
 
 

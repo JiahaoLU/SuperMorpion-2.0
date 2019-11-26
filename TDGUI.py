@@ -49,19 +49,7 @@ def collect_instruction(morpion, isover, screen):
 def over_instructions(morpion, screen):
     isover = morpion.isover()           # function that returns True if there is a winner or if the Morpion is full
     if isover:
-        if morpion.iswin():
-            show_text(screen, (100, 10),
-                      'Player {} wins!'.format(str(morpion.winner.player_number)) + ' ',
-                      (227, 29, 18), False, 50)
-            winner_number = str(morpion.winner.player_number)     # fetches the information we want to display on the screen
-            winner_score = morpion.winner.player_score
-            show_text(screen, (100, 50),
-                      'Player {0} new score : {1}'.format(winner_number, winner_score)
-                      + ' ', (227, 29, 18), False, 50)
-            show_text(screen, (150, 90), 'press R to try again...', (0, 0, 22), False, 30)
-        else:
-            show_text(screen, (100, 10), 'draw', (227, 29, 18), False, 100)
-            show_text(screen, (150, 30), 'press R to try again...', (0, 0, 22), False, 30)
+        draw_isover(morpion, screen)    # draws the message on the screen
     return isover
 
 def getIP():
